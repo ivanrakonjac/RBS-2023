@@ -8,6 +8,7 @@ import com.zuehlke.securesoftwaredevelopment.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,6 +70,7 @@ public class PersonsController {
     }
 
     @GetMapping("/persons")
+    @PreAuthorize("hasAuthority('VIEW_PERSONS_LIST')")
     public String persons(Model model) {
         model.addAttribute("persons", personRepository.getAll());
         return "persons";
@@ -76,6 +78,7 @@ public class PersonsController {
 
     @GetMapping(value = "/persons/search", produces = "application/json")
     @ResponseBody
+    @PreAuthorize("hasAuthority('VIEW_PERSONS_LIST')")
     public List<Person> searchPersons(@RequestParam String searchTerm) throws SQLException {
         return personRepository.search(searchTerm);
     }
