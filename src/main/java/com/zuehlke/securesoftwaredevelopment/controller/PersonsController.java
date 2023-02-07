@@ -56,6 +56,7 @@ public class PersonsController {
     }
 
     @GetMapping("/myprofile")
+    @PreAuthorize("hasAuthority('VIEW_MY_PROFILE')")
     public String self(Model model, Authentication authentication, HttpSession session) {
         String csrfToken = session.getAttribute("CSRF_TOKEN").toString();
         model.addAttribute("CSRF_TOKEN", csrfToken);
