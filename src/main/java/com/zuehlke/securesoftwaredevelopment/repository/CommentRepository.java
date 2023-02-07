@@ -35,7 +35,7 @@ public class CommentRepository {
             statement.setString(3, comment.getComment());
             statement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.warn("Creat comment failed, movie: " + comment.getMovieId() + "; user " + comment.getUserId(), e);
         }
     }
 
@@ -49,7 +49,7 @@ public class CommentRepository {
                 commentList.add(new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3)));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.warn("Get all comments failed, movieId: " + movieId, e);
         }
         return commentList;
     }

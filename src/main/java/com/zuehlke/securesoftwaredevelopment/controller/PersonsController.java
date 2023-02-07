@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Controller
-
 public class PersonsController {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonsController.class);
@@ -47,7 +46,10 @@ public class PersonsController {
         boolean currentUserIsNotAdmin = roleRepository.findByUserId(currentUserId)
                 .stream().noneMatch(role -> role.getName().equals("ADMIN"));
 
-        if(currentUserIsNotAdmin && currentUserId != id) throw new AccessDeniedException("Access denied!");
+        if(currentUserIsNotAdmin && currentUserId != id){
+            LOG.error("Access denied! User " + SecurityUtil.getCurrentUser().getUsername() + " does not have necessary permissions to update person details.");
+            throw new AccessDeniedException("Access denied!");
+        }
 
         String csrfToken = session.getAttribute("CSRF_TOKEN").toString();
         model.addAttribute("CSRF_TOKEN", csrfToken);
@@ -73,7 +75,10 @@ public class PersonsController {
         boolean currentUserIsNotAdmin = roleRepository.findByUserId(currentUserId)
                 .stream().noneMatch(role -> role.getName().equals("ADMIN"));
 
-        if(currentUserIsNotAdmin && currentUserId != id) throw new AccessDeniedException("Access denied!");
+        if(currentUserIsNotAdmin && currentUserId != id){
+            LOG.error("Access denied! User " + SecurityUtil.getCurrentUser().getUsername() + " does not have necessary permissions to update person details.");
+            throw new AccessDeniedException("Access denied!");
+        }
 
         personRepository.delete(id);
         userRepository.delete(id);
@@ -87,13 +92,19 @@ public class PersonsController {
 
         String sessionToken = session.getAttribute("CSRF_TOKEN").toString();
 
-        if(!csrfToken.equals(sessionToken)) throw new AccessDeniedException("Access denied!");
+        if(!csrfToken.equals(sessionToken)){
+            LOG.error("Access denied! User " + SecurityUtil.getCurrentUser().getUsername() + " does not have necessary permissions to update person details.");
+            throw new AccessDeniedException("Access denied!");
+        }
 
         int currentUserId = Objects.requireNonNull(SecurityUtil.getCurrentUser()).getId();
         boolean currentUserIsNotAdmin = roleRepository.findByUserId(currentUserId)
                 .stream().noneMatch(role -> role.getName().equals("ADMIN"));
 
-        if(currentUserIsNotAdmin && currentUserId != Integer.parseInt(person.getId())) throw new AccessDeniedException("Access denied!");
+        if(currentUserIsNotAdmin && currentUserId != Integer.parseInt(person.getId())){
+            LOG.error("Access denied! User " + SecurityUtil.getCurrentUser().getUsername() + " does not have necessary permissions to update person details.");
+            throw new AccessDeniedException("Access denied!");
+        }
 
         personRepository.update(person);
 

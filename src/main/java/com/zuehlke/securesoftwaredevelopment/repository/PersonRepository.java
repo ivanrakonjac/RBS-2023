@@ -34,7 +34,7 @@ public class PersonRepository {
                 personList.add(createPersonFromResultSet(rs));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.warn("Get all persons failed.", e);
         }
         return personList;
     }
@@ -56,13 +56,13 @@ public class PersonRepository {
     public Person get(String personId) {
         String query = "SELECT id, firstName, lastName, email FROM persons WHERE id = " + personId;
         try (Connection connection = dataSource.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet rs = statement.executeQuery(query)) {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query)) {
             while (rs.next()) {
                 return createPersonFromResultSet(rs);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.warn("Failed to get person, personId: " + personId, e);
         }
 
         return null;
@@ -75,7 +75,7 @@ public class PersonRepository {
         ) {
             statement.executeUpdate(query);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.warn("Failed to delete person, personId: " + personId, e);
         }
     }
 
@@ -100,7 +100,7 @@ public class PersonRepository {
             statement.setString(2, email);
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.warn("Failed to update person, personId: " + personUpdate.getId(), e);
         }
     }
 }
