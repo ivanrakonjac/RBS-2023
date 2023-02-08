@@ -3,7 +3,6 @@ package com.zuehlke.securesoftwaredevelopment.service;
 import com.zuehlke.securesoftwaredevelopment.domain.Permission;
 import com.zuehlke.securesoftwaredevelopment.domain.User;
 import com.zuehlke.securesoftwaredevelopment.repository.UserRepository;
-import jdk.internal.org.jline.utils.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findUser(username);
         if (user == null) {
-            Log.warn("Username not found, username: " + username);
+            LOG.warn("Username not found, username: " + username);
             throw new UsernameNotFoundException("Username not found");
         }
 
