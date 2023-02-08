@@ -1,7 +1,5 @@
 package com.zuehlke.securesoftwaredevelopment.repository;
 
-import com.zuehlke.securesoftwaredevelopment.config.AuditLogger;
-import com.zuehlke.securesoftwaredevelopment.config.Entity;
 import com.zuehlke.securesoftwaredevelopment.domain.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +14,6 @@ import java.util.List;
 public class PersonRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonRepository.class);
-    private static final AuditLogger auditLogger = AuditLogger.getAuditLogger(PersonRepository.class);
 
     private DataSource dataSource;
 

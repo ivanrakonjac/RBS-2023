@@ -24,6 +24,7 @@ public class DatabaseAuthenticationProvider implements AuthenticationProvider {
     private final PermissionService permissionService;
 
     private static final String PASSWORD_WRONG_MESSAGE = "Authentication failed for username='%s',password='%s'";
+    private static final AuditLogger auditLogger = AuditLogger.getAuditLogger(DatabaseAuthenticationProvider.class);
 
     public DatabaseAuthenticationProvider(UserRepository userRepository, PermissionService permissionService) {
         this.userRepository = userRepository;
@@ -42,6 +43,7 @@ public class DatabaseAuthenticationProvider implements AuthenticationProvider {
         if (success) {
             User user = userRepository.findUser(username);
             List<GrantedAuthority> grantedAuthorities = getGrantedAuthorities(user);
+            auditLogger.audit("User successfully logged in, username: " + username);
             return new UsernamePasswordAuthenticationToken(user, password, grantedAuthorities);
         }
 

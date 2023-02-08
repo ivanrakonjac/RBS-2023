@@ -25,12 +25,12 @@ import java.util.Objects;
 @Controller
 public class PersonsController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PersonsController.class);
-    private static final AuditLogger auditLogger = AuditLogger.getAuditLogger(PersonRepository.class);
-
     private final PersonRepository personRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+
+    private static final Logger LOG = LoggerFactory.getLogger(PersonsController.class);
+    private static final AuditLogger auditLogger = AuditLogger.getAuditLogger(PersonsController.class);
 
     public PersonsController(PersonRepository personRepository, UserRepository userRepository, RoleRepository roleRepository) {
         this.personRepository = personRepository;
@@ -83,6 +83,8 @@ public class PersonsController {
         personRepository.delete(id);
         userRepository.delete(id);
 
+        auditLogger.audit("Person deleted successfully, personId: " + id + " by: " + SecurityUtil.getCurrentUser().getUsername());
+
         return ResponseEntity.noContent().build();
     }
 
@@ -107,6 +109,8 @@ public class PersonsController {
         }
 
         personRepository.update(person);
+
+        auditLogger.audit("Person updated successfully, personId: " + person.getId() + " by: " + SecurityUtil.getCurrentUser().getUsername());
 
         return "redirect:/persons/" + person.getId();
     }
